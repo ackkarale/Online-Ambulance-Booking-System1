@@ -1,0 +1,25 @@
+{% include "header.html" %}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-5 heading">
+      <div class="row ">
+        <strong><h1 style="color:Green">Locate Nearest Ambulance</h1></strong>
+      </div>
+      <div class="row charging-btn">
+        {% if user_role == "Driver" %}
+          <!-- Hide the button if the user is a driver -->
+          <!-- You can optionally display a message for drivers -->
+          <p>You are logged in as a driver. You cannot find an ambulance.</p>
+        {% elif user_role == "User" %}
+          <!-- Display the button for non-driver users -->
+          <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='{{ url_for('location') }}';">Find Ambulance</button>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-lg-7 Charging-img">
+      <img src="https://cdn.dribbble.com/users/976984/screenshots/3727819/hospital.gif" alt="Charging Station Gif">
+    </div>
+  </div>
+</div>
+{% include "footer.html" %}

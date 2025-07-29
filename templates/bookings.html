@@ -1,0 +1,71 @@
+{% include "header.html" %}
+
+<div class="container mt-5">
+   <h2 class="mb-3 fw-bolder">My Bookings</h2>
+<table class="table">
+   <thead class="table-dark">
+     <tr>
+      {{current_users}}
+       {% if current_user.role=="Driver" %}
+       <th scope="col">UserId</th>
+       {% else: %}
+       <th scope="col">AmbulanceId</th>
+       {% endif %}
+       <th scope="col">Latitude</th>
+       <th scope="col">Longitude</th>
+       <th scope="col">Date</th>
+       <th scope="col">Status</th>
+
+       {% if current_user.role=="Driver" %}
+       <th scope="col"></th>
+
+       {% endif %}
+
+
+
+     </tr>
+   </thead>
+   <tbody>
+      {% for booking in bookings: %}
+      <tr>
+         {% if current_user.role=="Driver" %}
+
+         <td>{{booking.userId}}</td>
+         {% else: %}
+         <td>{{booking.ambulanceId}}</td>
+         {% endif %}
+
+         <td>{{booking.latitude}}</td>
+         <td>{{booking.longitude}}</td>
+         <td>{{booking.date}}</td>
+         <td>{{booking.status}}</td>
+         {% if current_user.role=="Driver" %}
+         
+         <form action="/map" method="POST">
+ <input type="hidden" name="dest_lat" value="{{ booking.latitude }}">
+    <input type="hidden" name="dest_long" value="{{ booking.longitude }}">
+            {% if booking.status=='Approve' %}
+            <td><button type="submit" class="btn btn-primary btn-md">Direction</button></td>
+            {% endif %}
+            {% if booking.status!='Approve' %}
+          </form>
+          <td colspan="2">
+            <form action="{{ url_for('changeStatus', statusCode=0, bookingId=booking.id) }}" method="POST">
+                <button type="submit" class="btn btn-primary btn-md">Approve</button>
+            </form>
+              <form action="{{ url_for('changeStatus', statusCode=1, bookingId=booking.id) }}" method="POST">
+                  <button type="submit" class="btn btn-primary btn-md mt-1">DisApprove</button>
+              </form>
+        </td>
+          {% endif %}
+         {% endif %}
+
+       </tr>
+      {% endfor %}
+ 
+
+   </tbody>
+ </table>
+</div>
+
+{% include "footer.html" %}
